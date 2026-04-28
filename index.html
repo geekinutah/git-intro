@@ -151,9 +151,21 @@ git status                       # "nothing to commit, working tree clean"
 
 git log                          # one commit, with hash, author, message</code></pre>
   <aside class="notes">
-    Run this live. Predict what `git status` will say BEFORE running it each time — that's the lesson.
-    After this, edit the README, repeat: status, add, status, commit, status, log. The repetition IS the teaching.
-    If you're running long, skip `git log` here — you'll come back to it in the branching segment.
+    Demo sequence — predict git status output BEFORE running each command, then verify:
+
+    1. EMPTY DIRECTORY: `mkdir notes` then `git status` — Git ignores it entirely. Explain: Git tracks files, not directories. Show the .gitkeep convention.
+
+    2. ADD A FILE: `echo "# Hello Git" > README.md` then `git status` — shows untracked. `git add README.md`, `git status` — now staged.
+
+    3. MODIFY A FILE: Edit README.md, `git status` — shows modified in working directory (not staged). Add and commit. Reinforce the three states.
+
+    4. DELETE A FILE: `rm README.md` then `git status` — shows "deleted" unstaged. Stage it, commit.
+
+    5. UNINTENDED ARTIFACT: Create hello_world.py (`print("Hello, world!")`), run it with `python3 hello_world.py`. `git status` now shows both hello_world.py AND __pycache__/ as untracked. This is the "oops" moment. Create .gitignore with `__pycache__/` — run `git status` again and __pycache__ is gone. Commit hello_world.py and .gitignore.
+
+    6. PARTIAL STAGING: Make two changes (e.g. edit README.md and add a new file). `git add` only one. `git status` shows one staged, one unstaged — same slide 3 diagram, now live.
+
+    7. MOVE WITHOUT git mv: `mv hello_world.py main.py` then `git status` — shows deleted + untracked. Contrast with `git mv` which shows a clean rename.
   </aside>
 </section>
 
