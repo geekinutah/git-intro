@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git intro</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --fg: #e8e6e0;
+    --fg-dim: #a8a6a0;
+    --fg-faint: #6e6c66;
+    --gray-fill: #2a2a2a;     --gray-stroke: #6e6c66;     --gray-text: #d8d6d0;
+    --teal-fill: #0e3a30;     --teal-stroke: #5DCAA5;     --teal-text: #9FE1CB;
+    --purple-fill: #2a1f5c;   --purple-stroke: #AFA9EC;   --purple-text: #CECBF6;
+    --amber-fill: #4a2c08;    --amber-stroke: #EF9F27;    --amber-text: #FAC775;
+    --blue-fill: #0c2a4a;     --blue-stroke: #85B7EB;     --blue-text: #B5D4F4;
+    --red-fill: #3a0e0e;      --red-stroke: #F09595;      --red-text: #F7C1C1;
+  }
+  .reveal-viewport { background: var(--bg) !important; }
+  .reveal { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--fg); }
+  .reveal h1 { font-size: 2em; font-weight: 500; margin-bottom: 0.3em; color: var(--fg); text-transform: none; letter-spacing: normal; }
+  .reveal h2 { font-size: 1.3em; font-weight: 500; margin: 0 0 0.4em 0; color: var(--fg); text-transform: none; letter-spacing: normal; }
+  .reveal h3 { font-size: 1.1em; font-weight: 500; color: var(--fg-dim); text-transform: none; letter-spacing: normal; }
+  .reveal .slide-subtitle { font-size: 0.65em; color: var(--fg-dim); margin: -0.2em 0 0.5em 0; font-weight: 400; }
+  .reveal .time-tag { font-size: 0.45em; color: var(--fg-faint); font-weight: 400; letter-spacing: 0.05em; display: block; margin-bottom: 0.2em; }
+  .reveal section { text-align: left; }
+  .reveal .center { text-align: center; }
+  .reveal pre { box-shadow: none; border: 1px solid #333; border-radius: 8px; background: #0d0d0d; width: 100%; }
+  .reveal pre code { padding: 1em; font-size: 0.62em; line-height: 1.55; max-height: none; background: transparent; color: var(--fg); }
+  .reveal code { background: #2a2a2a; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.85em; color: var(--amber-text); }
+  .reveal ul li, .reveal ol li { margin-bottom: 0.5em; }
+  .reveal a { color: var(--blue-text); }
+  .reveal .callout { border-left: 3px solid var(--teal-stroke); border-radius: 0; padding: 0.6em 1em; margin-top: 1em; background: rgba(93, 202, 165, 0.06); }
+  .reveal .callout strong { color: var(--teal-text); }
+  .reveal .diagram-slide { display: flex; flex-direction: column; height: 95vh; }
+  .reveal .diagram-slide .header { flex: 0 0 auto; }
+  .reveal .diagram-slide svg { flex: 1 1 auto; width: 100%; height: 100%; min-height: 0; display: block; }
+  .reveal svg .svg-text { font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+  .reveal svg .svg-title { font-size: 14px; font-weight: 500; }
+  .reveal svg .svg-subtitle { font-size: 12px; font-weight: 400; }
+  .reveal svg .svg-large { font-size: 18px; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- 1. TITLE -->
+<section>
+  <div class="center" style="margin-top: 12%;">
+    <h1>Git intro</h1>
+    <p class="slide-subtitle" style="font-size: 0.8em;">A 1-hour working knowledge for engineers</p>
+    <p style="margin-top: 4em; font-size: 0.55em; color: var(--fg-faint);">Press <code>S</code> for speaker notes · <code>?</code> for shortcuts · <code>F</code> for fullscreen</p>
+  </div>
+  <aside class="notes">
+    Welcome. One hour, day-to-day Git. Cuts: rebase, stash, cherry-pick, tags, internals — separate session if there's interest.
+    Tell them: stop me with questions. The undo segment at the end is the highest-value part, so I'll guard time for it.
+  </aside>
+</section>
+
+<!-- 2. WHY GIT / MENTAL MODEL -->
+<section>
+  <h2><span class="time-tag">0:00–0:05</span>Why Git, mental model</h2>
+  <div style="margin-top: 1.5em;">
+    <p style="font-size: 0.95em;"><strong style="color: var(--teal-text);">Snapshots, not diffs.</strong><br>
+    A commit is a photo of all your files at that moment. Not a list of changes.</p>
+    <p style="margin-top: 1.5em; font-size: 0.95em;"><strong style="color: var(--teal-text);">Distributed: every clone is a full repo.</strong><br>
+    When you <code>clone</code>, you get the entire history. You can commit, branch, and view log offline. Push and pull are just sync.</p>
+    <div class="callout" style="margin-top: 2em;">
+      Git is not Dropbox. It doesn't sync continuously. <strong>You</strong> decide when to snapshot, <strong>you</strong> decide when to share.
+    </div>
+  </div>
+  <aside class="notes">
+    Two ideas: snapshots (not diffs), distributed (every clone is full).
+    The Dropbox contrast is the most useful framing — it explains why Git "feels different."
+    Keep this to 5 minutes. The mental model lives or dies in the next segment when they see it run.
+  </aside>
+</section>
+
+<!-- 3. THREE STATES -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:05–0:15</span>The three states</h2>
+  </div>
+  <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <rect x="30" y="60" width="180" height="80" rx="8" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="120" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">Working directory</text>
+    <text class="svg-text svg-subtitle" x="120" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--fg-dim)">Files you're editing</text>
+
+    <rect x="250" y="60" width="180" height="80" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="340" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Staging area</text>
+    <text class="svg-text svg-subtitle" x="340" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">Draft of next commit</text>
+
+    <rect x="470" y="60" width="180" height="80" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="560" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">Repository</text>
+    <text class="svg-text svg-subtitle" x="560" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.8">Committed history</text>
+
+    <line x1="215" y1="90" x2="245" y2="90" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="230" y="78" text-anchor="middle" fill="var(--fg)">git add</text>
+
+    <line x1="435" y1="90" x2="465" y2="90" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="450" y="78" text-anchor="middle" fill="var(--fg)">git commit</text>
+
+    <line x1="245" y1="125" x2="215" y2="125" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="230" y="142" text-anchor="middle" fill="var(--fg-dim)">git restore --staged</text>
+
+    <line x1="465" y1="125" x2="435" y2="125" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="450" y="142" text-anchor="middle" fill="var(--fg-dim)">git reset</text>
+
+    <text class="svg-text svg-large" x="340" y="220" text-anchor="middle" fill="var(--teal-text)">When in doubt: git status</text>
+    <text class="svg-text svg-subtitle" x="340" y="245" text-anchor="middle" fill="var(--fg-dim)">Tells you which state every file is in</text>
+  </svg>
+  <aside class="notes">
+    The single most important slide. Everything else is built on this.
+    "Working directory" = files on disk. "Staging" = draft of next commit. "Repository" = committed history.
+    Beginners trip on staging — they expect Dropbox-style auto-sync. Explain WHY staging exists: so you can craft intentional commits even when you've edited five files.
+    Drill the habit: run `git status` after every command.
+  </aside>
+</section>
+
+<!-- 4. FIRST COMMITS DEMO -->
+<section>
+  <h2><span class="time-tag">0:05–0:15</span>Live demo: first commits</h2>
+<pre><code class="language-bash">mkdir hello-git && cd hello-git
+git init
+git status                       # "no commits yet"
+
+echo "# Hello Git" > README.md
+git status                       # README.md is "untracked"
+
+git add README.md
+git status                       # now "staged"
+
+git commit -m "Initial commit"
+git status                       # "nothing to commit, working tree clean"
+
+git log                          # one commit, with hash, author, message</code></pre>
+  <aside class="notes">
+    Run this live. Predict what `git status` will say BEFORE running it each time — that's the lesson.
+    After this, edit the README, repeat: status, add, status, commit, status, log. The repetition IS the teaching.
+    If you're running long, skip `git log` here — you'll come back to it in the branching segment.
+  </aside>
+</section>
+
+<!-- 5. BRANCHES — TWO MENTAL MODELS -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:15–0:25</span>Two ways to picture a branch</h2>
+    <p class="slide-subtitle">The mental model is what you reason with. The real view is what Git actually stores.</p>
+  </div>
+  <svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- LEFT PANEL: Mental model — parallel tracks with branch and merge-back -->
+    <text class="svg-text svg-title" x="170" y="30" text-anchor="middle" fill="var(--fg-dim)">Mental model</text>
+    <text class="svg-text svg-subtitle" x="170" y="48" text-anchor="middle" fill="var(--fg-faint)">parallel tracks that diverge and merge</text>
+
+    <!-- main track -->
+    <text class="svg-text svg-subtitle" x="20" y="106" text-anchor="start" fill="var(--teal-text)">main</text>
+    <line x1="58" y1="102" x2="330" y2="102" stroke="var(--teal-stroke)" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="80" cy="102" r="13" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="80" y="102" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="140" cy="102" r="13" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="140" y="102" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <!-- merge commit on main -->
+    <circle cx="310" cy="102" r="13" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1.5"/>
+    <text class="svg-text svg-subtitle" x="310" y="102" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">M</text>
+
+    <!-- branch off curve from C2 down to feature track -->
+    <path d="M 140 115 Q 160 140 180 178" fill="none" stroke="var(--fg-faint)" stroke-width="1"/>
+
+    <!-- feature track -->
+    <text class="svg-text svg-subtitle" x="20" y="190" text-anchor="start" fill="var(--purple-text)">feature</text>
+    <line x1="180" y1="186" x2="280" y2="186" stroke="var(--purple-stroke)" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="200" cy="186" r="13" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="200" y="186" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C3</text>
+    <circle cx="260" cy="186" r="13" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="260" y="186" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C4</text>
+
+    <!-- merge curve from C4 back up to M on main -->
+    <path d="M 260 173 Q 285 150 305 115" fill="none" stroke="var(--fg-faint)" stroke-width="1"/>
+
+    <!-- annotations under tracks -->
+    <text class="svg-text svg-subtitle" x="140" y="240" text-anchor="middle" fill="var(--fg-dim)">branch off</text>
+    <line x1="140" y1="244" x2="140" y2="118" stroke="var(--fg-faint)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+    <text class="svg-text svg-subtitle" x="310" y="240" text-anchor="middle" fill="var(--fg-dim)">merge back</text>
+    <line x1="310" y1="244" x2="310" y2="118" stroke="var(--fg-faint)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+    <!-- vertical divider -->
+    <line x1="370" y1="20" x2="370" y2="360" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- RIGHT PANEL: Real view — just commits as blobs with parent pointers -->
+    <text class="svg-text svg-title" x="525" y="30" text-anchor="middle" fill="var(--fg-dim)">Real view</text>
+    <text class="svg-text svg-subtitle" x="525" y="48" text-anchor="middle" fill="var(--fg-faint)">commits + pointers, nothing else</text>
+
+    <!-- linear chain of commits, all gray (just blobs) -->
+    <circle cx="430" cy="170" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="430" y="170" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="495" cy="170" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="495" y="170" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <circle cx="560" cy="170" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="560" y="170" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C3</text>
+    <circle cx="625" cy="170" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="625" y="170" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C4</text>
+
+    <!-- parent pointers (each commit points back to its parent) -->
+    <line x1="475" y1="170" x2="455" y2="170" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr2)"/>
+    <line x1="540" y1="170" x2="520" y2="170" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr2)"/>
+    <line x1="605" y1="170" x2="585" y2="170" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr2)"/>
+
+    <!-- main pointer -->
+    <rect x="455" y="100" width="80" height="28" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="495" y="114" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="495" y1="128" x2="495" y2="146" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr2)"/>
+
+    <!-- feature pointer -->
+    <rect x="585" y="100" width="80" height="28" rx="6" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="625" y="114" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">feature</text>
+    <line x1="625" y1="128" x2="625" y2="146" stroke="var(--purple-stroke)" stroke-width="1" marker-end="url(#arr2)"/>
+
+    <!-- caption -->
+    <text class="svg-text svg-subtitle" x="525" y="240" text-anchor="middle" fill="var(--fg-dim)">A branch is just a name</text>
+    <text class="svg-text svg-subtitle" x="525" y="256" text-anchor="middle" fill="var(--fg-dim)">pointing to a commit</text>
+  </svg>
+  <aside class="notes">
+    Two views, same data. Both useful for different things.
+    LEFT (mental model): parallel tracks. Feature branches off main, gets some commits, then merges back. This is how to THINK about branches in your head — a separate lane of work that rejoins later.
+    RIGHT (real view): all Git is actually storing. Four commits in a chain (each pointing to its parent), and two labels — main and feature — that each point to a commit. That's it. No "branches" as separate things.
+    The right view kills the "branches are copies" misconception. Branches cost nothing because they're just labels.
+    Note that the right view here shows the state BEFORE a merge — both main and feature are just labels on the same chain. Once you merge, the labels point to the same commit. We'll see that on the next slides.
+  </aside>
+</section>
+
+<!-- 6. BRANCHING DEMO -->
+<section>
+  <h2><span class="time-tag">0:15–0:25</span>Live demo: branching</h2>
+<pre><code class="language-bash">git switch -c feature-greeting   # create + switch to branch
+echo "Hello, world!" >> README.md
+git add README.md
+git commit -m "Add greeting"
+
+git switch main                  # back to main; greeting gone
+git merge feature-greeting       # fast-forward (next slide)
+
+git log --graph --oneline --all  # see the picture</code></pre>
+  <p style="font-size: 0.6em; color: var(--fg-dim); margin-top: 1em;">
+    <strong style="color: var(--teal-text);">Tip:</strong> alias the log command —
+    <code>git config --global alias.lg "log --graph --oneline --all"</code>
+  </p>
+  <aside class="notes">
+    Run it live. The first merge will be fast-forward — show the graph BEFORE explaining what just happened.
+    Alias tip: tell them they'll use `git lg` constantly. It's the fastest way to develop a feel for branch shape.
+  </aside>
+</section>
+
+<!-- 7. FAST-FORWARD MERGE -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:15–0:25</span>Fast-forward merge</h2>
+    <p class="slide-subtitle">Main has no new commits — Git just slides the pointer forward</p>
+  </div>
+  <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <text class="svg-text svg-subtitle" x="40" y="22" text-anchor="start" fill="var(--fg-faint)">BEFORE</text>
+    <line x1="40" y1="30" x2="640" y2="30" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <circle cx="120" cy="80" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="120" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="240" cy="80" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="240" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <circle cx="380" cy="80" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="380" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C3</text>
+    <circle cx="520" cy="80" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="520" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C4</text>
+
+    <line x1="140" y1="80" x2="220" y2="80" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+    <line x1="260" y1="80" x2="360" y2="80" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+    <line x1="400" y1="80" x2="500" y2="80" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+
+    <rect x="200" y="120" width="80" height="28" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="240" y="134" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="240" y1="120" x2="240" y2="104" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr3)"/>
+
+    <rect x="480" y="120" width="80" height="28" rx="6" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="520" y="134" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">feature</text>
+    <line x1="520" y1="120" x2="520" y2="104" stroke="var(--purple-stroke)" stroke-width="1" marker-end="url(#arr3)"/>
+
+    <text class="svg-text svg-subtitle" x="40" y="200" text-anchor="start" fill="var(--fg-faint)">AFTER git merge feature</text>
+    <line x1="40" y1="208" x2="640" y2="208" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <circle cx="120" cy="260" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="120" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="240" cy="260" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="240" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <circle cx="380" cy="260" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="380" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C3</text>
+    <circle cx="520" cy="260" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="520" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C4</text>
+
+    <line x1="140" y1="260" x2="220" y2="260" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+    <line x1="260" y1="260" x2="360" y2="260" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+    <line x1="400" y1="260" x2="500" y2="260" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr3)"/>
+
+    <rect x="440" y="300" width="80" height="28" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="480" y="314" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="500" y1="300" x2="514" y2="284" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr3)"/>
+
+    <rect x="540" y="300" width="80" height="28" rx="6" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="580" y="314" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">feature</text>
+    <line x1="560" y1="300" x2="528" y2="284" stroke="var(--purple-stroke)" stroke-width="1" marker-end="url(#arr3)"/>
+  </svg>
+  <aside class="notes">
+    BEFORE you advance the slide: ask the room "what do you think will happen when I merge feature into main?"
+    Then advance. Main slides forward to point at C4. NO new commit was created. That's a fast-forward.
+    Why? Main hadn't moved since the branch was made. Git can just walk the pointer forward.
+  </aside>
+</section>
+
+<!-- 8. REAL MERGE COMMIT -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:15–0:25</span>Real merge commit</h2>
+    <p class="slide-subtitle">Both branches moved forward — Git creates a new commit with two parents</p>
+  </div>
+  <svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <text class="svg-text svg-subtitle" x="40" y="22" text-anchor="start" fill="var(--fg-faint)">BEFORE</text>
+    <line x1="40" y1="30" x2="640" y2="30" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <circle cx="100" cy="100" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="100" y="100" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="200" cy="100" r="20" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="200" y="100" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+
+    <circle cx="340" cy="60" r="20" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="340" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">C3</text>
+    <circle cx="460" cy="60" r="20" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="460" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">C4</text>
+
+    <circle cx="340" cy="140" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="340" y="140" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C5</text>
+    <circle cx="460" cy="140" r="20" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="460" y="140" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C6</text>
+
+    <line x1="120" y1="100" x2="180" y2="100" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="218" y1="90" x2="320" y2="68" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="218" y1="110" x2="320" y2="132" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="360" y1="60" x2="440" y2="60" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="360" y1="140" x2="440" y2="140" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+
+    <rect x="540" y="50" width="80" height="28" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="580" y="64" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="540" y1="64" x2="486" y2="62" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr4)"/>
+
+    <rect x="540" y="130" width="80" height="28" rx="6" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="580" y="144" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">feature</text>
+    <line x1="540" y1="144" x2="486" y2="142" stroke="var(--purple-stroke)" stroke-width="1" marker-end="url(#arr4)"/>
+
+    <text class="svg-text svg-subtitle" x="40" y="210" text-anchor="start" fill="var(--fg-faint)">AFTER git merge feature</text>
+    <line x1="40" y1="218" x2="640" y2="218" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <circle cx="80" cy="290" r="16" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="80" y="290" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="170" cy="290" r="16" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="170" y="290" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <circle cx="270" cy="260" r="16" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="270" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">C3</text>
+    <circle cx="370" cy="260" r="16" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="370" y="260" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">C4</text>
+    <circle cx="270" cy="320" r="16" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="270" y="320" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C5</text>
+    <circle cx="370" cy="320" r="16" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="370" y="320" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">C6</text>
+
+    <circle cx="475" cy="290" r="22" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="2"/>
+    <text class="svg-text svg-title" x="475" y="290" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">M</text>
+
+    <line x1="96" y1="290" x2="154" y2="290" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="184" y1="282" x2="254" y2="266" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="184" y1="298" x2="254" y2="314" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="286" y1="260" x2="354" y2="260" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="286" y1="320" x2="354" y2="320" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr4)"/>
+    <line x1="386" y1="270" x2="455" y2="284" stroke="var(--amber-stroke)" stroke-width="1.2" marker-end="url(#arr4)"/>
+    <line x1="386" y1="310" x2="455" y2="296" stroke="var(--amber-stroke)" stroke-width="1.2" marker-end="url(#arr4)"/>
+
+    <rect x="535" y="276" width="80" height="28" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="575" y="290" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="535" y1="290" x2="500" y2="290" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr4)"/>
+  </svg>
+  <aside class="notes">
+    Same setup as the previous slide, but main also moved forward (C3, C4) while feature was being worked on (C5, C6).
+    Git can't just walk a pointer — both branches have new work. So it creates a NEW commit M (amber) with TWO parents. That's the diamond shape.
+    Press O for overview mode if you want to flip between the FF slide and this one to drive the contrast home.
+  </aside>
+</section>
+
+<!-- 9. REMOTES -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:25–0:35</span>git pull = git fetch + git merge</h2>
+  </div>
+  <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <rect x="40" y="40" width="280" height="240" rx="12" fill="none" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3"/>
+    <text class="svg-text svg-subtitle" x="50" y="60" text-anchor="start" fill="var(--fg-dim)">Your laptop</text>
+    <rect x="360" y="40" width="280" height="240" rx="12" fill="none" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3"/>
+    <text class="svg-text svg-subtitle" x="370" y="60" text-anchor="start" fill="var(--fg-dim)">Remote (origin)</text>
+
+    <circle cx="100" cy="130" r="18" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="100" y="130" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="180" cy="130" r="18" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="180" y="130" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <line x1="118" y1="130" x2="162" y2="130" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr5)"/>
+
+    <rect x="140" y="170" width="80" height="26" rx="6" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="180" y="183" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
+    <line x1="180" y1="170" x2="180" y2="150" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr5)"/>
+
+    <rect x="140" y="208" width="100" height="26" rx="6" fill="var(--blue-fill)" stroke="var(--blue-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="190" y="221" text-anchor="middle" dominant-baseline="central" fill="var(--blue-text)">origin/main</text>
+    <line x1="190" y1="208" x2="190" y2="200" stroke="var(--blue-stroke)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arr5)"/>
+
+    <text class="svg-text svg-subtitle" x="180" y="258" text-anchor="middle" fill="var(--fg-dim)">Stale: thinks remote is at C2</text>
+
+    <circle cx="420" cy="130" r="18" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="420" y="130" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C1</text>
+    <circle cx="490" cy="130" r="18" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="490" y="130" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">C2</text>
+    <circle cx="560" cy="130" r="18" fill="var(--blue-fill)" stroke="var(--blue-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="560" y="130" text-anchor="middle" dominant-baseline="central" fill="var(--blue-text)">C3</text>
+    <line x1="438" y1="130" x2="472" y2="130" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr5)"/>
+    <line x1="508" y1="130" x2="542" y2="130" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr5)"/>
+
+    <rect x="520" y="170" width="80" height="26" rx="6" fill="var(--blue-fill)" stroke="var(--blue-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="560" y="183" text-anchor="middle" dominant-baseline="central" fill="var(--blue-text)">main</text>
+    <line x1="560" y1="170" x2="560" y2="150" stroke="var(--blue-stroke)" stroke-width="1" marker-end="url(#arr5)"/>
+
+    <text class="svg-text svg-subtitle" x="500" y="258" text-anchor="middle" fill="var(--fg-dim)">Has a new commit C3</text>
+
+    <text class="svg-text svg-subtitle" x="340" y="120" text-anchor="middle" fill="var(--purple-text)">git fetch</text>
+    <line x1="320" y1="135" x2="360" y2="135" stroke="var(--purple-stroke)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr5)"/>
+
+    <text class="svg-text svg-subtitle" x="340" y="200" text-anchor="middle" fill="var(--fg)">git merge</text>
+    <text class="svg-text svg-subtitle" x="340" y="216" text-anchor="middle" fill="var(--fg-dim)">(local)</text>
+
+    <text class="svg-text svg-large" x="340" y="320" text-anchor="middle" fill="var(--teal-text)">git pull does both in one command</text>
+  </svg>
+  <aside class="notes">
+    `origin/main` is your LOCAL CACHE of where the remote's main was last time you checked.
+    `git fetch` updates the cache (origin/main) — it does NOT change your `main`.
+    `git merge origin/main` then combines that into your local main.
+    `git pull` does both. Most of the time you want pull.
+  </aside>
+</section>
+
+<!-- 10. REJECTED PUSH -->
+<section>
+  <h2><span class="time-tag">0:25–0:35</span>The most common workflow hiccup</h2>
+  <p style="margin-top: 0.8em; font-size: 0.85em;">You try to push. Git rejects it because the remote has commits you don't have.</p>
+<pre><code class="language-bash">git push
+# ! [rejected]        main -> main (fetch first)
+# error: failed to push some refs to '...'
+
+git pull       # get + merge their work
+git push       # now succeeds</code></pre>
+  <div class="callout">
+    <strong>The rule:</strong> if push is rejected, <code>git pull</code> first, then push again.
+  </div>
+  <aside class="notes">
+    This will happen to them on day one. Demystify it now.
+    To demo: edit a file via the GitHub web UI in another tab, then try to push from your terminal. Push fails. Pull. Push again.
+  </aside>
+</section>
+
+<!-- 11. PR WORKFLOW LOOP -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:35–0:45</span>The PR workflow loop</h2>
+  </div>
+  <svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <rect x="40" y="40" width="160" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="120" y="62" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">Pull main</text>
+    <text class="svg-text svg-subtitle" x="120" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.8">git switch main; git pull</text>
+
+    <rect x="260" y="40" width="160" height="56" rx="8" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="340" y="62" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">Branch</text>
+    <text class="svg-text svg-subtitle" x="340" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)" opacity="0.8">git switch -c my-feature</text>
+
+    <rect x="480" y="40" width="160" height="56" rx="8" fill="var(--purple-fill)" stroke="var(--purple-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="560" y="62" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)">Commit</text>
+    <text class="svg-text svg-subtitle" x="560" y="80" text-anchor="middle" dominant-baseline="central" fill="var(--purple-text)" opacity="0.8">git add; git commit</text>
+
+    <rect x="480" y="140" width="160" height="56" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="560" y="162" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Push</text>
+    <text class="svg-text svg-subtitle" x="560" y="180" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">git push -u origin ...</text>
+
+    <rect x="260" y="140" width="160" height="56" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="340" y="162" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Open PR</text>
+    <text class="svg-text svg-subtitle" x="340" y="180" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">In the browser</text>
+
+    <rect x="40" y="140" width="160" height="56" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="120" y="162" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Merge</text>
+    <text class="svg-text svg-subtitle" x="120" y="180" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">In the browser</text>
+
+    <rect x="200" y="240" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="340" y="262" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">Pull main + delete branch</text>
+    <text class="svg-text svg-subtitle" x="340" y="280" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.8">git pull; git branch -d my-feature</text>
+
+    <line x1="200" y1="68" x2="256" y2="68" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <line x1="420" y1="68" x2="476" y2="68" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <line x1="560" y1="96" x2="560" y2="136" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <line x1="480" y1="168" x2="424" y2="168" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <line x1="260" y1="168" x2="204" y2="168" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <line x1="120" y1="196" x2="220" y2="236" stroke="var(--fg-dim)" stroke-width="1" marker-end="url(#arr6)"/>
+    <path d="M 200 268 Q 50 268 50 160 Q 50 40 116 40" fill="none" stroke="var(--teal-stroke)" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr6)"/>
+
+    <text class="svg-text svg-subtitle" x="340" y="350" text-anchor="middle" fill="var(--fg-dim)">Repeat this loop 50 times. It becomes muscle memory.</text>
+  </svg>
+  <aside class="notes">
+    What their week actually looks like. Walk through it once, then run it live.
+    `git push -u origin <branch>` — only the first push of a new branch. The `-u` sets the upstream so future pushes are just `git push`.
+  </aside>
+</section>
+
+<!-- 12. UNDO INTRO -->
+<section>
+  <div class="center" style="margin-top: 18%;">
+    <h2 style="margin-bottom: 1em;"><span class="time-tag">0:45–0:55</span>Undo recipes</h2>
+    <p style="font-size: 1.4em; color: var(--teal-text); font-weight: 500;">Git almost never actually loses your work.</p>
+    <p style="font-size: 0.85em; color: var(--fg-dim); margin-top: 1em;">Five recipes. Then a safety net.</p>
+  </div>
+  <aside class="notes">
+    The most valuable segment in the hour.
+    Reframe: "Git almost never loses your work" — this is true and changes their whole posture toward the tool.
+    Exceptions are `--hard` and force-push. Both flagged when we get there.
+  </aside>
+</section>
+
+<!-- 13. UNDO DECISION TREE — REWORKED AS THREE ROWS -->
+<section class="diagram-slide">
+  <div class="header">
+    <h2><span class="time-tag">0:45–0:55</span>Which undo do I need?</h2>
+  </div>
+  <svg viewBox="0 0 680 460" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <text class="svg-text svg-subtitle" x="20" y="30" text-anchor="start" fill="var(--fg-faint)">Not committed yet</text>
+    <line x1="20" y1="38" x2="660" y2="38" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <rect x="40" y="55" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="180" y="74" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.85">Discard file edits</text>
+    <text class="svg-text svg-title" x="180" y="94" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git restore &lt;file&gt;</text>
+
+    <rect x="360" y="55" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="500" y="74" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.85">Unstage, keep edits</text>
+    <text class="svg-text svg-title" x="500" y="94" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git restore --staged &lt;file&gt;</text>
+
+    <text class="svg-text svg-subtitle" x="20" y="160" text-anchor="start" fill="var(--fg-faint)">Committed but not pushed</text>
+    <line x1="20" y1="168" x2="660" y2="168" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <rect x="40" y="185" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="180" y="204" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.85">Keep changes</text>
+    <text class="svg-text svg-title" x="180" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git reset --soft HEAD~1</text>
+
+    <rect x="360" y="185" width="280" height="56" rx="8" fill="var(--red-fill)" stroke="var(--red-stroke)" stroke-width="1.5"/>
+    <text class="svg-text svg-subtitle" x="500" y="204" text-anchor="middle" dominant-baseline="central" fill="var(--red-text)" opacity="0.85">Throw changes away ⚠</text>
+    <text class="svg-text svg-title" x="500" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--red-text)">git reset --hard HEAD~1</text>
+
+    <text class="svg-text svg-subtitle" x="20" y="290" text-anchor="start" fill="var(--fg-faint)">Already pushed</text>
+    <line x1="20" y1="298" x2="660" y2="298" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
+
+    <rect x="200" y="315" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-subtitle" x="340" y="334" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.85">Always safe</text>
+    <text class="svg-text svg-title" x="340" y="354" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git revert &lt;hash&gt;</text>
+
+    <rect x="120" y="395" width="440" height="50" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1" stroke-dasharray="4 3"/>
+    <text class="svg-text svg-subtitle" x="340" y="412" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.85">Truly panicked? The safety net.</text>
+    <text class="svg-text svg-title" x="340" y="432" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">git reflog</text>
+  </svg>
+  <aside class="notes">
+    The most-referenced slide. They'll mentally come back to this for months.
+    Three rows = three scenarios based on the state of your work.
+    `--hard` (red) is the ONLY undo that actually deletes uncommitted work. Say it out loud. Twice.
+    Walk each row with a mini-demo. Then `git reflog` last — show recent HEAD movements, recover a "lost" commit.
+  </aside>
+</section>
+
+<!-- 14. Q&A -->
+<section>
+  <div class="center" style="margin-top: 22%;">
+    <h1>Questions?</h1>
+    <p style="margin-top: 2em; color: var(--fg-dim); font-size: 0.7em;">When stuck: <code>git status</code> → <code>git log --graph --oneline --all</code> → <code>git reflog</code></p>
+    <p style="margin-top: 3em; color: var(--fg-faint); font-size: 0.55em;">Cheat sheet handout available separately</p>
+  </div>
+  <aside class="notes">
+    Take questions. Hand out the cheat sheet markdown file AFTER Q&A.
+    If `rebase` comes up: "powerful but easy to misuse, separate session."
+  </aside>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [RevealNotes, RevealHighlight]
+  });
+</script>
+</body>
+</html>
