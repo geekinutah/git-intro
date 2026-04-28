@@ -122,10 +122,11 @@
     <text class="svg-text svg-subtitle" x="340" y="245" text-anchor="middle" fill="var(--fg-dim)">Tells you which state every file is in</text>
   </svg>
   <aside class="notes">
-    The single most important slide. Everything else is built on this.
-    "Working directory" = files on disk. "Staging" = draft of next commit. "Repository" = committed history.
-    Beginners trip on staging — they expect Dropbox-style auto-sync. Explain WHY staging exists: so you can craft intentional commits even when you've edited five files.
-    Drill the habit: run `git status` after every command.
+    The working paradigm:
+    - Viewer: working directory — these are just the files on disk you're looking at and editing.
+    - Make changes: staging — show examples of adding directories, adding files to directories, changing content.
+    - Commit: adding a snapshot to the repository.
+    Use `git status` throughout to show how changes move between states.
   </aside>
 </section>
 
