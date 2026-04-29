@@ -93,38 +93,42 @@
   <div class="header">
     <h2><span class="time-tag">0:05–0:15</span>The three states</h2>
   </div>
-  <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <defs>
       <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
         <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </marker>
     </defs>
-    <rect x="30" y="60" width="180" height="80" rx="8" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
-    <text class="svg-text svg-title" x="120" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">Working directory</text>
-    <text class="svg-text svg-subtitle" x="120" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--fg-dim)">Files you're editing</text>
 
-    <rect x="250" y="60" width="180" height="80" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
-    <text class="svg-text svg-title" x="340" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Staging area</text>
-    <text class="svg-text svg-subtitle" x="340" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">Draft of next commit</text>
+    <!-- Forward labels + arrows (above the boxes) -->
+    <text class="svg-text svg-subtitle" x="230" y="76" text-anchor="middle" fill="var(--fg)">git add</text>
+    <line x1="215" y1="88" x2="245" y2="88" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
 
-    <rect x="470" y="60" width="180" height="80" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
-    <text class="svg-text svg-title" x="560" y="92" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">Repository</text>
-    <text class="svg-text svg-subtitle" x="560" y="116" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.8">Committed history</text>
+    <text class="svg-text svg-subtitle" x="450" y="76" text-anchor="middle" fill="var(--fg)">git commit</text>
+    <line x1="435" y1="88" x2="465" y2="88" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
 
-    <line x1="215" y1="90" x2="245" y2="90" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
-    <text class="svg-text svg-subtitle" x="230" y="78" text-anchor="middle" fill="var(--fg)">git add</text>
+    <!-- The three boxes (y=100–180) -->
+    <rect x="30" y="100" width="180" height="80" rx="8" fill="var(--gray-fill)" stroke="var(--gray-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="120" y="132" text-anchor="middle" dominant-baseline="central" fill="var(--gray-text)">Working directory</text>
+    <text class="svg-text svg-subtitle" x="120" y="156" text-anchor="middle" dominant-baseline="central" fill="var(--fg-dim)">Files you're editing</text>
 
-    <line x1="435" y1="90" x2="465" y2="90" stroke="var(--fg-dim)" stroke-width="1.5" marker-end="url(#arr1)"/>
-    <text class="svg-text svg-subtitle" x="450" y="78" text-anchor="middle" fill="var(--fg)">git commit</text>
+    <rect x="250" y="100" width="180" height="80" rx="8" fill="var(--amber-fill)" stroke="var(--amber-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="340" y="132" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">Staging area</text>
+    <text class="svg-text svg-subtitle" x="340" y="156" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)" opacity="0.8">Draft of next commit</text>
 
-    <line x1="245" y1="125" x2="215" y2="125" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
-    <text class="svg-text svg-subtitle" x="230" y="142" text-anchor="middle" fill="var(--fg-dim)">git restore --staged</text>
+    <rect x="470" y="100" width="180" height="80" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
+    <text class="svg-text svg-title" x="560" y="132" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">Repository</text>
+    <text class="svg-text svg-subtitle" x="560" y="156" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.8">Committed history</text>
 
-    <line x1="465" y1="125" x2="435" y2="125" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
-    <text class="svg-text svg-subtitle" x="450" y="142" text-anchor="middle" fill="var(--fg-dim)">git reset</text>
+    <!-- Backward arrows + labels (below the boxes) -->
+    <line x1="245" y1="192" x2="215" y2="192" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="230" y="208" text-anchor="middle" fill="var(--fg-dim)">git restore --staged</text>
 
-    <text class="svg-text svg-large" x="340" y="220" text-anchor="middle" fill="var(--teal-text)">When in doubt: git status</text>
-    <text class="svg-text svg-subtitle" x="340" y="245" text-anchor="middle" fill="var(--fg-dim)">Tells you which state every file is in</text>
+    <line x1="465" y1="192" x2="435" y2="192" stroke="var(--fg-faint)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr1)"/>
+    <text class="svg-text svg-subtitle" x="450" y="208" text-anchor="middle" fill="var(--fg-dim)">git reset</text>
+
+    <text class="svg-text svg-large" x="340" y="254" text-anchor="middle" fill="var(--teal-text)">When in doubt: git status</text>
+    <text class="svg-text svg-subtitle" x="340" y="279" text-anchor="middle" fill="var(--fg-dim)">Tells you which state every file is in</text>
   </svg>
   <div class="callout" style="font-size: 0.65em; margin-top: 0.5em;">
     Committed locally? The next step is <code>git push</code> — we'll cover that in the remotes section.
