@@ -285,8 +285,13 @@ git log --graph --oneline --all  # see the picture</code></pre>
     <code>git config --global alias.lg "log --graph --oneline --all"</code>
   </p>
   <aside class="notes">
-    Run it live. The first merge will be fast-forward — show the graph BEFORE explaining what just happened.
-    Alias tip: tell them they'll use `git lg` constantly. It's the fastest way to develop a feel for branch shape.
+    Demo setup (hello_world.py):
+    - main: start with `def main(): print("Hello")` — initial commit
+    - mwilson/add_hello_func: branch from main, add `def hello_world(): print("Hello, World!")` — does NOT touch the print in main()
+    - mwilson/change_hello_message: branch from main (same starting point), change the print in main() to `print("Howdy!")`
+    - Switch to main, merge add_hello_func → FF (slide 7): main hasn't moved, pointer just slides forward
+    - On main: change main() body to call `hello_world()` — now main has its own commit diverging from change_hello_message's origin
+    - Merge change_hello_message → conflict (slide 8): both main and the branch changed the same line
   </aside>
 </section>
 
