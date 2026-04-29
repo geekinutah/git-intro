@@ -466,7 +466,7 @@ git push -u origin feature-x      # first push of a new branch
     <strong>Only need <code>-u</code> once per branch.</strong> After that, <code>git push</code> with no arguments just works.
   </div>
   <aside class="notes">
-    Demo: gh repo create REPO-NAME --private --source=. --push
+    Demo: gh repo create REPO-NAME --public --source=. --push
     Show `git remote -v` first — demystify what origin actually is. It's just a bookmark for a URL.
     Demo: create a branch, commit something, then `git push` — it fails. Then `git push -u origin <branch>` — it works. From that point plain `git push` works.
     Open-source aside: if you're contributing to a project you don't own, you fork it first. Your fork becomes origin, and you add the original as a second remote called `upstream`. Same mechanics, just two remotes instead of one. Not relevant for internal work.
