@@ -432,6 +432,9 @@ git log --graph --oneline --all  # see the picture</code></pre>
     <text class="svg-text svg-subtitle" x="575" y="270" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">main</text>
     <line x1="535" y1="270" x2="500" y2="270" stroke="var(--teal-stroke)" stroke-width="1" marker-end="url(#arr4)"/>
   </svg>
+  <div class="callout" style="border-left-color: var(--red-stroke); background: rgba(240, 149, 149, 0.06); font-size: 0.7em; margin-top: 0.5em;">
+    <strong style="color: var(--red-text);">Avoid this.</strong> In practice, we prevent the ugly merge by running <code>git rebase main</code> before pushing — it replays your commits on top of current main so the merge becomes a fast-forward. Legitimate true merges exist (the Linux kernel being the classic case), but for day-to-day team work this shape is a smell.
+  </div>
   <aside class="notes">
     Same setup as the previous slide, but main also moved forward (C3, C4) while feature was being worked on (C5, C6).
     Git can't just walk a pointer — both branches have new work. So it creates a NEW commit M (amber) with TWO parents. That's the diamond shape.
