@@ -596,6 +596,7 @@ git push       # now succeeds</code></pre>
   <aside class="notes">
     What their week actually looks like. Walk through it once, then run it live.
     `git push -u origin <branch>` — only the first push of a new branch. The `-u` sets the upstream so future pushes are just `git push`.
+    Before you push: this is where `git rebase main` lives in the real workflow. It replays your commits on top of current main so the merge becomes a fast-forward — no ugly merge commit, clean linear history. "Trust me on the rebase." Refer back to slide 8 if needed: we avoid that diamond shape at almost any cost. (Exceptions exist — the Linux kernel being the classic case — but for day-to-day team work, rebase before you push is the habit to build.)
   </aside>
 </section>
 
