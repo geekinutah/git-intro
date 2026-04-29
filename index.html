@@ -472,7 +472,26 @@ git push -u origin feature-x      # first push of a new branch
   </aside>
 </section>
 
-<!-- 10. REMOTES (fetch+merge) -->
+<!-- 10. REJECTED PUSH -->
+<section>
+  <h2><span class="time-tag">0:25–0:35</span>The most common workflow hiccup</h2>
+  <p style="margin-top: 0.8em; font-size: 0.85em;">You try to push. Git rejects it because the remote has commits you don't have.</p>
+<pre><code class="language-bash">git push
+# ! [rejected]        main -> main (fetch first)
+# error: failed to push some refs to '...'
+
+git pull       # get + merge their work
+git push       # now succeeds</code></pre>
+  <div class="callout">
+    <strong>The rule:</strong> if push is rejected, <code>git pull</code> first, then push again.
+  </div>
+  <aside class="notes">
+    This will happen to them on day one. Demystify it now.
+    To demo: edit a file via the GitHub web UI in another tab, then try to push from your terminal. Push fails. Pull. Push again.
+  </aside>
+</section>
+
+<!-- 11. REMOTES (fetch+merge) -->
 <section class="diagram-slide">
   <div class="header">
     <h2><span class="time-tag">0:25–0:35</span>git pull = git fetch + git merge</h2>
@@ -533,25 +552,6 @@ git push -u origin feature-x      # first push of a new branch
     `git fetch` updates the cache (origin/main) — it does NOT change your `main`.
     `git merge origin/main` then combines that into your local main.
     `git pull` does both. Most of the time you want pull.
-  </aside>
-</section>
-
-<!-- 11. REJECTED PUSH -->
-<section>
-  <h2><span class="time-tag">0:25–0:35</span>The most common workflow hiccup</h2>
-  <p style="margin-top: 0.8em; font-size: 0.85em;">You try to push. Git rejects it because the remote has commits you don't have.</p>
-<pre><code class="language-bash">git push
-# ! [rejected]        main -> main (fetch first)
-# error: failed to push some refs to '...'
-
-git pull       # get + merge their work
-git push       # now succeeds</code></pre>
-  <div class="callout">
-    <strong>The rule:</strong> if push is rejected, <code>git pull</code> first, then push again.
-  </div>
-  <aside class="notes">
-    This will happen to them on day one. Demystify it now.
-    To demo: edit a file via the GitHub web UI in another tab, then try to push from your terminal. Push fails. Pull. Push again.
   </aside>
 </section>
 
