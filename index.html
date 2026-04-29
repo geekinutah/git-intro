@@ -609,11 +609,11 @@ git push       # now succeeds</code></pre>
 
     <rect x="40" y="185" width="280" height="56" rx="8" fill="var(--teal-fill)" stroke="var(--teal-stroke)" stroke-width="1"/>
     <text class="svg-text svg-subtitle" x="180" y="204" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)" opacity="0.85">Keep changes</text>
-    <text class="svg-text svg-title" x="180" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git reset --soft HEAD~1</text>
+    <text class="svg-text svg-title" x="180" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--teal-text)">git reset --soft HEAD~</text>
 
     <rect x="360" y="185" width="280" height="56" rx="8" fill="var(--red-fill)" stroke="var(--red-stroke)" stroke-width="1.5"/>
     <text class="svg-text svg-subtitle" x="500" y="204" text-anchor="middle" dominant-baseline="central" fill="var(--red-text)" opacity="0.85">Throw changes away ⚠</text>
-    <text class="svg-text svg-title" x="500" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--red-text)">git reset --hard HEAD~1</text>
+    <text class="svg-text svg-title" x="500" y="224" text-anchor="middle" dominant-baseline="central" fill="var(--red-text)">git reset --hard HEAD~</text>
 
     <text class="svg-text svg-subtitle" x="20" y="290" text-anchor="start" fill="var(--fg-faint)">Already pushed</text>
     <line x1="20" y1="298" x2="660" y2="298" stroke="var(--fg-faint)" stroke-width="0.5" opacity="0.4"/>
@@ -627,10 +627,10 @@ git push       # now succeeds</code></pre>
     <text class="svg-text svg-title" x="340" y="432" text-anchor="middle" dominant-baseline="central" fill="var(--amber-text)">git reflog</text>
   </svg>
   <aside class="notes">
-    The most-referenced slide. They'll mentally come back to this for months.
-    Three rows = three scenarios based on the state of your work.
-    `--hard` (red) is the ONLY undo that actually deletes uncommitted work. Say it out loud. Twice.
-    Walk each row with a mini-demo. Then `git reflog` last — show recent HEAD movements, recover a "lost" commit.
+    - git restore &lt;file&gt; = git checkout -- path/to/file = restore an unstaged file to what the branch ref has snapshotted
+    - git restore --staged = git reset --soft, but for one file
+    - git reset --soft HEAD~ = unstage any changes and also combine them with the previous commit's changes
+    - git reset --hard HEAD~ = kill all changes and point to the commit before the current
   </aside>
 </section>
 
