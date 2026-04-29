@@ -439,7 +439,28 @@ git log --graph --oneline --all  # see the picture</code></pre>
   </aside>
 </section>
 
-<!-- 9. REMOTES -->
+<!-- 9. REMOTES INTRO -->
+<section>
+  <h2><span class="time-tag">0:25–0:35</span>Remotes and pushing</h2>
+  <p style="font-size: 0.85em; margin-top: 0.5em;">A <strong style="color: var(--teal-text);">remote</strong> is just a named URL. <code>origin</code> is the repo you cloned from — nothing magic about the name.</p>
+<pre><code class="language-bash">git remote -v
+# origin  git@github.com:you/your-repo.git (fetch)
+# origin  git@github.com:you/your-repo.git (push)
+
+git push                          # push current branch to its tracked remote
+git push -u origin feature-x      # first push of a new branch
+                                  # -u sets tracking so future pushes are just `git push`</code></pre>
+  <div class="callout" style="margin-top: 1em;">
+    <strong>Only need <code>-u</code> once per branch.</strong> After that, <code>git push</code> with no arguments just works.
+  </div>
+  <aside class="notes">
+    Show `git remote -v` first — demystify what origin actually is. It's just a bookmark for a URL.
+    Demo: create a branch, commit something, then `git push` — it fails. Then `git push -u origin <branch>` — it works. From that point plain `git push` works.
+    Open-source aside: if you're contributing to a project you don't own, you fork it first. Your fork becomes origin, and you add the original as a second remote called `upstream`. Same mechanics, just two remotes instead of one. Not relevant for internal work.
+  </aside>
+</section>
+
+<!-- 10. REMOTES (fetch+merge) -->
 <section class="diagram-slide">
   <div class="header">
     <h2><span class="time-tag">0:25–0:35</span>git pull = git fetch + git merge</h2>
@@ -503,7 +524,7 @@ git log --graph --oneline --all  # see the picture</code></pre>
   </aside>
 </section>
 
-<!-- 10. REJECTED PUSH -->
+<!-- 11. REJECTED PUSH -->
 <section>
   <h2><span class="time-tag">0:25–0:35</span>The most common workflow hiccup</h2>
   <p style="margin-top: 0.8em; font-size: 0.85em;">You try to push. Git rejects it because the remote has commits you don't have.</p>
@@ -522,7 +543,7 @@ git push       # now succeeds</code></pre>
   </aside>
 </section>
 
-<!-- 11. PR WORKFLOW LOOP -->
+<!-- 12. PR WORKFLOW LOOP -->
 <section class="diagram-slide">
   <div class="header">
     <h2><span class="time-tag">0:35–0:45</span>The PR workflow loop</h2>
@@ -578,7 +599,7 @@ git push       # now succeeds</code></pre>
   </aside>
 </section>
 
-<!-- 12. UNDO INTRO -->
+<!-- 13. UNDO INTRO -->
 <section>
   <div class="center" style="margin-top: 18%;">
     <h2 style="margin-bottom: 1em;"><span class="time-tag">0:45–0:55</span>Undo recipes</h2>
@@ -592,7 +613,7 @@ git push       # now succeeds</code></pre>
   </aside>
 </section>
 
-<!-- 13. UNDO DECISION TREE — REWORKED AS THREE ROWS -->
+<!-- 14. UNDO DECISION TREE -->
 <section class="diagram-slide">
   <div class="header">
     <h2><span class="time-tag">0:45–0:55</span>Which undo do I need?</h2>
@@ -639,7 +660,7 @@ git push       # now succeeds</code></pre>
   </aside>
 </section>
 
-<!-- 14. Q&A -->
+<!-- 15. Q&A -->
 <section>
   <div class="center" style="margin-top: 22%;">
     <h1>Questions?</h1>
